@@ -1,15 +1,21 @@
+import 'dart:ui';
+
 import 'package:flutter/material.dart';
 
 class CustomButton extends StatelessWidget {
   final VoidCallback? onPressed;
   final bool isLoading;
   final String text;
+  final Color? backgroundColor;
+  final Color? textColor;
 
   const CustomButton({
     super.key,
     required this.onPressed,
     required this.isLoading,
     required this.text,
+    this.backgroundColor,
+    this.textColor,
   });
 
   @override
@@ -17,20 +23,19 @@ class CustomButton extends StatelessWidget {
     return ElevatedButton(
       onPressed: onPressed,
       style: ElevatedButton.styleFrom(
-        minimumSize: const Size(double.infinity, 50),
+        backgroundColor: backgroundColor ?? Theme.of(context).primaryColor,
+        padding: const EdgeInsets.symmetric(vertical: 14, horizontal: 24),
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
       ),
       child: isLoading
-          ? const SizedBox(
-              width: 20,
-              height: 20,
-              child: CircularProgressIndicator(
-                strokeWidth: 2,
-                color: Colors.white,
-              ),
-            )
+          ? const CircularProgressIndicator(color: Colors.white, strokeWidth: 2)
           : Text(
               text,
-              style: const TextStyle(fontSize: 18),
+              style: TextStyle(
+                fontSize: 16,
+                color: textColor ?? Colors.white,
+                fontWeight: FontWeight.bold,
+              ),
             ),
     );
   }
