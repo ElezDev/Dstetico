@@ -20,7 +20,7 @@ class _HomeScreenState extends State<HomeScreen> {
   int _currentIndex = 0;
 
   final List<Widget> _screens = [
-    const Center(child: Text('Inicio')),
+    const Center(child: Text('Scanner')),
     const Center(child: Text('Historial')),
     ScannerScreen(),
     const Center(child: Text('Perfil')),
@@ -59,9 +59,7 @@ class _HomeScreenState extends State<HomeScreen> {
       backgroundColor: AppColors.color5,
       appBar: AppBar(
         backgroundColor: AppColors.color2,
-        elevation: 0,
-        title: const Text('Inicio', style: TextStyle(color: Colors.white)),
-        centerTitle: true,
+        title: const Text('D-Stetico', style: TextStyle(color: Colors.white)),
         iconTheme: const IconThemeData(color: Colors.white),
       ),
       drawer: _buildDrawer(),
