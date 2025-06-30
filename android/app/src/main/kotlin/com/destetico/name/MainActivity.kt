@@ -1,4 +1,4 @@
-package com.example.scandstetico
+package com.destetico.name
 
 import io.flutter.embedding.android.FlutterActivity
 
