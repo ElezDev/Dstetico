@@ -31,6 +31,7 @@ dependencies:
   cupertino_icons: ^1.0.8
   flutter:
     sdk: flutter
+  flutter_animate: ^4.5.2
   flutter_native_splash: ^2.4.6
   http: ^1.4.0
   mobile_scanner: ^7.0.1
@@ -51,14 +52,14 @@ flutter_launcher_icons:
   remove_alpha_ios: true
 
 flutter_native_splash:
-  color: "#ffffff"
+  color: "#E3EEF9"
   image: "assets/icons/icon.png"
   android: true
   ios: true
   android_12:
     image: assets/icons/icon.png
-    icon_background_color: "#ffffff"
-    color: "#ffffff"
+    icon_background_color: "#E3EEF9"
+    color: "#E3EEF9"
 
 flutter:
   uses-material-design: true
