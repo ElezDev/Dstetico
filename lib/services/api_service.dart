@@ -19,25 +19,27 @@ class ApiService {
 
   // Método para login
   static Future<Map<String, dynamic>> login(
-      String usuario, String password) async {
+    String usuario,
+    String password,
+  ) async {
     final response = await http.post(
       Uri.parse('${_baseUrl}api_login.php'),
       headers: {
         'Authorization': _authToken,
         'Content-Type': 'application/json',
       },
-      body: json.encode({
-        'usuario': usuario,
-        'password': password,
-      }),
+      body: json.encode({'usuario': usuario, 'password': password}),
     );
 
     if (response.statusCode == 200) {
-      // Extraer y guardar la cookie de sesión
-      _sessionId = _extractSessionCookie(response);
-      
-      // Guardar datos de sesión
       final sessionData = json.decode(response.body);
+
+      if (sessionData['codigo'] == null) {
+        throw Exception('Usuario o contraseña incorrectos');
+      }
+
+      _sessionId = _extractSessionCookie(response);
+
       if (sessionData['codigo'] != null) {
         await _saveSessionData(
           sessionData['codigo'],
@@ -46,7 +48,7 @@ class ApiService {
           _sessionId,
         );
       }
-      
+
       return sessionData;
     } else {
       throw Exception('Error en el login');
@@ -102,9 +104,11 @@ class ApiService {
 
   // Método para validar código (actualizado)
   static Future<Map<String, dynamic>> validateCode(
-      String code, int type) async {
+    String code,
+    int type,
+  ) async {
     final sessionId = await getSessionId();
-    
+
     if (sessionId == null) {
       throw Exception('No hay sesión activa');
     }
@@ -116,10 +120,7 @@ class ApiService {
         'Content-Type': 'application/json',
         'Cookie': 'PHPSESSID=$sessionId',
       },
-      body: json.encode({
-        'tipo': type.toString(),
-        'codigo': code,
-      }),
+      body: json.encode({'tipo': type.toString(), 'codigo': code}),
     );
 
     if (response.statusCode == 200) {

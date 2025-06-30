@@ -13,7 +13,6 @@ class _ScannerScreenState extends State<ScannerScreen> {
   final MobileScannerController cameraController = MobileScannerController();
   final ValueNotifier<bool> _isTorchOn = ValueNotifier(false);
   bool _isLoading = false;
-  Map<String, dynamic>? _userData;
   bool _isScanning = true;
 
   bool _showFlashButton = true;
@@ -21,22 +20,10 @@ class _ScannerScreenState extends State<ScannerScreen> {
   @override
   void initState() {
     super.initState();
-    _loadUserData();
   }
 
-  Future<void> _loadUserData() async {
-    final data = await ApiService.loadSession();
-    setState(() {
-      _userData = data;
-    });
-  }
 
-  Future<void> _logout() async {
-    await ApiService.logout();
-    if (mounted) {
-      Navigator.pushReplacementNamed(context, '/login');
-    }
-  }
+ 
 
   @override
   void dispose() {
@@ -58,7 +45,6 @@ Future<void> _processScannedCode(String scannedCode) async {
     final tipo = scannedCode.length > 50 ? 2 : 1;
     final response = await ApiService.validateCode(scannedCode, tipo);
 
-    // La clave del cambio está aquí: `response['codigo'] != 0` (sin comillas)
     final bool esValido = response['codigo'] != 0;
 
     if (mounted) {
@@ -77,7 +63,7 @@ Future<void> _processScannedCode(String scannedCode) async {
             size: 48,
           ),
           content: esValido
-              ? Column( // Contenido para CÓDIGO VÁLIDO
+              ? Column( 
                   mainAxisSize: MainAxisSize.min,
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
@@ -87,7 +73,7 @@ Future<void> _processScannedCode(String scannedCode) async {
                     Text('Sexo: ${response['sexo']}'),
                   ],
                 )
-              : Column( // Contenido para CÓDIGO INVÁLIDO
+              : Column( 
                   mainAxisSize: MainAxisSize.min,
                   children: [
                     Text(
@@ -138,13 +124,7 @@ Future<void> _processScannedCode(String scannedCode) async {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      // appBar: AppBar(
-      //   title: const Text('Escanear Código'),
-      //   actions: [
-      //     // Eliminamos el botón de flash del AppBar
-      //   ],
-      // ),
-      // drawer: _buildDrawer(),
+    
       body: Stack(
         children: [
           MobileScanner(
@@ -160,7 +140,6 @@ Future<void> _processScannedCode(String scannedCode) async {
             },
           ),
 
-          // Marco de escaneo personalizado
           Center(
             child: Container(
               width: MediaQuery.of(context).size.width * 0.7,
@@ -175,7 +154,6 @@ Future<void> _processScannedCode(String scannedCode) async {
             ),
           ),
 
-          // Botón de flash grande en la esquina inferior derecha
           Positioned(
             bottom: 80,
             right: 20,
@@ -239,7 +217,6 @@ Future<void> _processScannedCode(String scannedCode) async {
             ),
           ),
 
-          // Indicador de estado del flash
           Positioned(
             bottom: 130,
             right: 20,
@@ -276,7 +253,6 @@ Future<void> _processScannedCode(String scannedCode) async {
             ),
           ),
 
-          // Botón de pausa/play del escaneo
           Positioned(
             bottom: 20,
             right: 20,
@@ -331,90 +307,4 @@ Future<void> _processScannedCode(String scannedCode) async {
     );
   }
 
-  Widget _buildDrawer() {
-    return Drawer(
-      child: ListView(
-        padding: EdgeInsets.zero,
-        children: [
-          UserAccountsDrawerHeader(
-            accountName: Text(
-              _userData?['nombre'] ?? 'Usuario no identificado',
-              style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
-            ),
-            accountEmail: Text(
-              _userData?['login'] ?? '',
-              style: const TextStyle(fontSize: 14),
-            ),
-            currentAccountPicture: CircleAvatar(
-              backgroundColor: Theme.of(context).primaryColor,
-              child: Text(
-                _userData?['nombre']?.substring(0, 1) ?? '?',
-                style: const TextStyle(fontSize: 30, color: Colors.white),
-              ),
-            ),
-            decoration: BoxDecoration(
-              gradient: LinearGradient(
-                colors: [
-                  Theme.of(context).primaryColor,
-                  Theme.of(context).primaryColorDark,
-                ],
-                begin: Alignment.topLeft,
-                end: Alignment.bottomRight,
-              ),
-            ),
-          ),
-          ListTile(
-            leading: const Icon(Icons.home, color: Colors.blue),
-            title: const Text('Inicio'),
-            onTap: () {
-              Navigator.pop(context);
-              Navigator.pop(context);
-            },
-          ),
-          ListTile(
-            leading: const Icon(Icons.qr_code, color: Colors.green),
-            title: const Text('Escanear Código'),
-            onTap: () {
-              Navigator.pop(context);
-            },
-          ),
-          const Divider(),
-          ListTile(
-            leading: const Icon(Icons.info, color: Colors.blueGrey),
-            title: const Text('Información de Sesión'),
-            subtitle: Text('Código: ${_userData?['codigo'] ?? 'N/A'}'),
-            onTap: () {
-              showDialog(
-                context: context,
-                builder: (context) => AlertDialog(
-                  title: const Text('Información de Sesión'),
-                  content: Column(
-                    mainAxisSize: MainAxisSize.min,
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text('Usuario: ${_userData?['nombre'] ?? 'N/A'}'),
-                      Text('Login: ${_userData?['login'] ?? 'N/A'}'),
-                      Text('Código: ${_userData?['codigo'] ?? 'N/A'}'),
-                    ],
-                  ),
-                  actions: [
-                    TextButton(
-                      onPressed: () => Navigator.pop(context),
-                      child: const Text('Cerrar'),
-                    ),
-                  ],
-                ),
-              );
-            },
-          ),
-          const Divider(),
-          ListTile(
-            leading: const Icon(Icons.exit_to_app, color: Colors.red),
-            title: const Text('Cerrar Sesión'),
-            onTap: _logout,
-          ),
-        ],
-      ),
-    );
-  }
 }

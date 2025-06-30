@@ -1,3 +1,4 @@
+import 'package:Dstetico/screens/login_screen.dart';
 import 'package:Dstetico/screens/scanner_screen.dart';
 import 'package:Dstetico/theme/app_colors.dart';
 import 'package:flutter/material.dart';
@@ -41,7 +42,11 @@ class _HomeScreenState extends State<HomeScreen> {
   Future<void> _logout() async {
     await ApiService.logout();
     if (mounted) {
-      Navigator.pushReplacementNamed(context, '/login');
+      Navigator.pushAndRemoveUntil(
+        context,
+        MaterialPageRoute(builder: (context) => const LoginScreen()),
+        (Route<dynamic> route) => false,
+      );
     }
   }
 
@@ -58,25 +63,17 @@ class _HomeScreenState extends State<HomeScreen> {
       body: Stack(
         children: [
           Positioned.fill(
-            child: Image.asset(
-              'assets/fondo_qr.png',
-              fit: BoxFit.cover,
-            ),
+            child: Image.asset('assets/fondo_qr.png', fit: BoxFit.cover),
           ),
-          Positioned.fill(
-            child: Container(
-              color: Colors.black.withAlpha(77),
-            ),
-          ),
+          Positioned.fill(child: Container(color: Colors.black.withAlpha(77))),
 
-  
           IndexedStack(index: _currentIndex, children: _screens),
         ],
       ),
 
       bottomNavigationBar: _buildBottomNavBar(),
       floatingActionButton: FloatingActionButton(
-        
+        heroTag: 'scannerFab', 
         onPressed: () {
           setState(() {
             _currentIndex = 2;
@@ -85,6 +82,7 @@ class _HomeScreenState extends State<HomeScreen> {
         backgroundColor: AppColors.color2,
         child: const Icon(Icons.qr_code_scanner),
       ).animate().scale(duration: 400.ms).fadeIn(),
+
       floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
     );
   }
@@ -131,45 +129,54 @@ class _HomeScreenState extends State<HomeScreen> {
   }
 
   Widget _buildDrawer() {
-    return Drawer(
-      child: Column(
-        children: [
-          UserAccountsDrawerHeader(
-            decoration: const BoxDecoration(
-              gradient: LinearGradient(
-                colors: [AppColors.color2, AppColors.color3],
-              ),
-            ),
-            accountName: Text(
-              _userData?['nombre'] ?? 'Usuario no identificado',
-              style: const TextStyle(fontSize: 18),
-            ),
-            accountEmail: Text(
-              _userData?['login'] ?? '',
-              style: const TextStyle(fontSize: 14),
-            ),
-            currentAccountPicture: CircleAvatar(
-              backgroundColor: AppColors.color4,
-              child: Text(
-                _userData?['nombre']?.substring(0, 1).toUpperCase() ?? '?',
-                style: const TextStyle(fontSize: 30, color: Colors.white),
-              ),
+  return Drawer(
+    child: Column(
+      children: [
+        UserAccountsDrawerHeader(
+          decoration: const BoxDecoration(
+            gradient: LinearGradient(
+              colors: [AppColors.color2, AppColors.color3],
             ),
           ),
-          _buildDrawerItem(Icons.person, 'Perfil', () {}),
-          _buildDrawerItem(Icons.history, 'Historial de Escaneos', () {}),
-          const Divider(),
-          ListTile(
-            leading: const Icon(Icons.info),
-            title: const Text('Información de Sesión'),
-            subtitle: Text('Código: ${_userData?['codigo'] ?? 'N/A'}'),
+          accountName: Text(
+            _userData?['nombre'] ?? 'Usuario no identificado',
+            style: const TextStyle(fontSize: 18),
           ),
-          const Spacer(),
-          _buildDrawerItem(Icons.exit_to_app, 'Cerrar Sesión', _logout),
-        ],
-      ),
-    );
-  }
+          accountEmail: Text(
+            _userData?['login'] ?? '',
+            style: const TextStyle(fontSize: 14),
+          ),
+          currentAccountPicture: CircleAvatar(
+            backgroundColor: AppColors.color4,
+            child: Text(
+              _userData?['nombre']?.substring(0, 1).toUpperCase() ?? '?',
+              style: const TextStyle(fontSize: 30, color: Colors.white),
+            ),
+          ),
+        ),
+        Expanded( 
+          child: ListView(
+            padding: EdgeInsets.zero,
+            children: [
+              _buildDrawerItem(Icons.person, 'Perfil', () {}),
+              _buildDrawerItem(Icons.history, 'Historial de Escaneos', () {}),
+              const Divider(),
+              ListTile(
+                leading: const Icon(Icons.info),
+                title: const Text('Información de Sesión'),
+                subtitle: Text('Código: ${_userData?['codigo'] ?? 'N/A'}'),
+              ),
+            ],
+          ),
+        ),
+        Padding(
+          padding: const EdgeInsets.only(bottom: 16.0), // ← Ajusta este valor según necesites
+          child: _buildDrawerItem(Icons.exit_to_app, 'Cerrar Sesión', _logout),
+        ),
+      ],
+    ),
+  );
+}
 
   Widget _buildDrawerItem(IconData icon, String title, VoidCallback onTap) {
     return ListTile(
