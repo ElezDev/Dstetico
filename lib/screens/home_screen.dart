@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_animate/flutter_animate.dart';
+import 'package:scandstetico/screens/scanner_screen.dart';
 import 'package:scandstetico/theme/app_colors.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -19,7 +20,7 @@ class _HomeScreenState extends State<HomeScreen> {
   final List<Widget> _screens = [
     const Center(child: Text('Inicio')),
     const Center(child: Text('Historial')),
-    const Center(child: Text('Escanear')),
+    ScannerScreen(),
     const Center(child: Text('Perfil')),
     const Center(child: Text('Ajustes')),
   ];
@@ -54,14 +55,32 @@ class _HomeScreenState extends State<HomeScreen> {
         iconTheme: const IconThemeData(color: Colors.white),
       ),
       drawer: _buildDrawer(),
-      body: IndexedStack(index: _currentIndex, children: _screens),
+      body: Stack(
+        children: [
+          Positioned.fill(
+            child: Image.asset(
+              'assets/fondo_qr.png',
+              fit: BoxFit.cover,
+            ),
+          ),
+          Positioned.fill(
+            child: Container(
+              color: Colors.black.withAlpha(77),
+            ),
+          ),
+
+  
+          IndexedStack(index: _currentIndex, children: _screens),
+        ],
+      ),
+
       bottomNavigationBar: _buildBottomNavBar(),
       floatingActionButton: FloatingActionButton(
+        
         onPressed: () {
           setState(() {
             _currentIndex = 2;
           });
-          Navigator.pushNamed(context, '/scanner');
         },
         backgroundColor: AppColors.color2,
         child: const Icon(Icons.qr_code_scanner),

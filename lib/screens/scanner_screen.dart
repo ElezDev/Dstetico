@@ -138,13 +138,13 @@ Future<void> _processScannedCode(String scannedCode) async {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: const Text('Escanear Código'),
-        actions: [
-          // Eliminamos el botón de flash del AppBar
-        ],
-      ),
-      drawer: _buildDrawer(),
+      // appBar: AppBar(
+      //   title: const Text('Escanear Código'),
+      //   actions: [
+      //     // Eliminamos el botón de flash del AppBar
+      //   ],
+      // ),
+      // drawer: _buildDrawer(),
       body: Stack(
         children: [
           MobileScanner(
@@ -167,7 +167,7 @@ Future<void> _processScannedCode(String scannedCode) async {
               height: MediaQuery.of(context).size.width * 0.7,
               decoration: BoxDecoration(
                 border: Border.all(
-                  color: Colors.green.withOpacity(0.8),
+                  color: Colors.green.withAlpha(204),
                   width: 4,
                 ),
                 borderRadius: BorderRadius.circular(16),
@@ -212,12 +212,12 @@ Future<void> _processScannedCode(String scannedCode) async {
                 child: Container(
                   padding: const EdgeInsets.all(12),
                   decoration: BoxDecoration(
-                    color: Colors.black.withOpacity(0.5),
+                    color: Colors.black.withAlpha(128),
                     shape: BoxShape.circle,
                     boxShadow: [
                       BoxShadow(
                         color: _isTorchOn.value
-                            ? Colors.yellow.withOpacity(0.8)
+                            ? Colors.yellow.withAlpha(204)
                             : Colors.transparent,
                         blurRadius: 15,
                         spreadRadius: 2,
@@ -255,10 +255,10 @@ Future<void> _processScannedCode(String scannedCode) async {
                       vertical: 4,
                     ),
                     decoration: BoxDecoration(
-                      color: Colors.yellow.withOpacity(0.2),
+                      color: Colors.yellow.withAlpha(51),
                       borderRadius: BorderRadius.circular(10),
                       border: Border.all(
-                        color: Colors.yellow.withOpacity(0.5),
+                        color: Colors.yellow.withAlpha(128),
                         width: 1,
                       ),
                     ),
@@ -309,7 +309,7 @@ Future<void> _processScannedCode(String scannedCode) async {
 
           if (_isLoading)
             Container(
-              color: Colors.black.withOpacity(0.4),
+              color: Colors.black.withAlpha(102),
               child: const Center(
                 child: Column(
                   mainAxisSize: MainAxisSize.min,
