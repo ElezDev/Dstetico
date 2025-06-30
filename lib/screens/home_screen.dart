@@ -19,7 +19,7 @@ class _HomeScreenState extends State<HomeScreen> {
   int _currentIndex = 0;
 
   final List<Widget> _screens = [
-    const Center(child: Text('Inicio')),
+    const Center(child: Text('Scanner')),
     const Center(child: Text('Historial')),
     ScannerScreen(),
     const Center(child: Text('Perfil')),
@@ -56,7 +56,7 @@ class _HomeScreenState extends State<HomeScreen> {
       backgroundColor: AppColors.color5,
       appBar: AppBar(
         backgroundColor: AppColors.color2,
-        title: const Text('Inicio', style: TextStyle(color: Colors.white)),
+        title: const Text('D-Stetico', style: TextStyle(color: Colors.white)),
         iconTheme: const IconThemeData(color: Colors.white),
       ),
       drawer: _buildDrawer(),
@@ -73,7 +73,7 @@ class _HomeScreenState extends State<HomeScreen> {
 
       bottomNavigationBar: _buildBottomNavBar(),
       floatingActionButton: FloatingActionButton(
-        heroTag: 'scannerFab', 
+        heroTag: 'scannerFab',
         onPressed: () {
           setState(() {
             _currentIndex = 2;
@@ -129,54 +129,60 @@ class _HomeScreenState extends State<HomeScreen> {
   }
 
   Widget _buildDrawer() {
-  return Drawer(
-    child: Column(
-      children: [
-        UserAccountsDrawerHeader(
-          decoration: const BoxDecoration(
-            gradient: LinearGradient(
-              colors: [AppColors.color2, AppColors.color3],
-            ),
-          ),
-          accountName: Text(
-            _userData?['nombre'] ?? 'Usuario no identificado',
-            style: const TextStyle(fontSize: 18),
-          ),
-          accountEmail: Text(
-            _userData?['login'] ?? '',
-            style: const TextStyle(fontSize: 14),
-          ),
-          currentAccountPicture: CircleAvatar(
-            backgroundColor: AppColors.color4,
-            child: Text(
-              _userData?['nombre']?.substring(0, 1).toUpperCase() ?? '?',
-              style: const TextStyle(fontSize: 30, color: Colors.white),
-            ),
-          ),
-        ),
-        Expanded( 
-          child: ListView(
-            padding: EdgeInsets.zero,
-            children: [
-              _buildDrawerItem(Icons.person, 'Perfil', () {}),
-              _buildDrawerItem(Icons.history, 'Historial de Escaneos', () {}),
-              const Divider(),
-              ListTile(
-                leading: const Icon(Icons.info),
-                title: const Text('Información de Sesión'),
-                subtitle: Text('Código: ${_userData?['codigo'] ?? 'N/A'}'),
+    return Drawer(
+      child: Column(
+        children: [
+          UserAccountsDrawerHeader(
+            decoration: const BoxDecoration(
+              gradient: LinearGradient(
+                colors: [AppColors.color2, AppColors.color3],
               ),
-            ],
+            ),
+            accountName: Text(
+              _userData?['nombre'] ?? 'Usuario no identificado',
+              style: const TextStyle(fontSize: 18),
+            ),
+            accountEmail: Text(
+              _userData?['login'] ?? '',
+              style: const TextStyle(fontSize: 14),
+            ),
+            currentAccountPicture: CircleAvatar(
+              backgroundColor: AppColors.color4,
+              child: Text(
+                _userData?['nombre']?.substring(0, 1).toUpperCase() ?? '?',
+                style: const TextStyle(fontSize: 30, color: Colors.white),
+              ),
+            ),
           ),
-        ),
-        Padding(
-          padding: const EdgeInsets.only(bottom: 16.0), // ← Ajusta este valor según necesites
-          child: _buildDrawerItem(Icons.exit_to_app, 'Cerrar Sesión', _logout),
-        ),
-      ],
-    ),
-  );
-}
+          Expanded(
+            child: ListView(
+              padding: EdgeInsets.zero,
+              children: [
+                _buildDrawerItem(Icons.person, 'Perfil', () {}),
+                _buildDrawerItem(Icons.history, 'Historial de Escaneos', () {}),
+                const Divider(),
+                ListTile(
+                  leading: const Icon(Icons.info),
+                  title: const Text('Información de Sesión'),
+                  subtitle: Text('Código: ${_userData?['codigo'] ?? 'N/A'}'),
+                ),
+              ],
+            ),
+          ),
+          Padding(
+            padding: const EdgeInsets.only(
+              bottom: 16.0,
+            ), // ← Ajusta este valor según necesites
+            child: _buildDrawerItem(
+              Icons.exit_to_app,
+              'Cerrar Sesión',
+              _logout,
+            ),
+          ),
+        ],
+      ),
+    );
+  }
 
   Widget _buildDrawerItem(IconData icon, String title, VoidCallback onTap) {
     return ListTile(
