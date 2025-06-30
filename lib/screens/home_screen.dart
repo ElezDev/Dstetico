@@ -1,7 +1,7 @@
+import 'package:Dstetico/screens/scanner_screen.dart';
+import 'package:Dstetico/theme/app_colors.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_animate/flutter_animate.dart';
-import 'package:scandstetico/screens/scanner_screen.dart';
-import 'package:scandstetico/theme/app_colors.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import '../services/api_service.dart';
