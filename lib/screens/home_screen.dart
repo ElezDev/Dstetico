@@ -1,17 +1,28 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_animate/flutter_animate.dart';
+import 'package:scandstetico/theme/app_colors.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+
 import '../services/api_service.dart';
-import 'scanner_screen.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
 
   @override
-  _HomeScreenState createState() => _HomeScreenState();
+  State<HomeScreen> createState() => _HomeScreenState();
 }
 
 class _HomeScreenState extends State<HomeScreen> {
   Map<String, dynamic>? _userData;
+  int _currentIndex = 0;
+
+  final List<Widget> _screens = [
+    const Center(child: Text('Inicio')),
+    const Center(child: Text('Historial')),
+    const Center(child: Text('Escanear')),
+    const Center(child: Text('Perfil')),
+    const Center(child: Text('Ajustes')),
+  ];
 
   @override
   void initState() {
@@ -36,40 +47,67 @@ class _HomeScreenState extends State<HomeScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: AppColors.color5,
       appBar: AppBar(
-        title: const Text('Inicio'),
+        backgroundColor: AppColors.color2,
+        title: const Text('Inicio', style: TextStyle(color: Colors.white)),
+        iconTheme: const IconThemeData(color: Colors.white),
       ),
       drawer: _buildDrawer(),
-      body: Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
+      body: IndexedStack(index: _currentIndex, children: _screens),
+      bottomNavigationBar: _buildBottomNavBar(),
+      floatingActionButton: FloatingActionButton(
+        onPressed: () {
+          setState(() {
+            _currentIndex = 2;
+          });
+          Navigator.pushNamed(context, '/scanner');
+        },
+        backgroundColor: AppColors.color2,
+        child: const Icon(Icons.qr_code_scanner),
+      ).animate().scale(duration: 400.ms).fadeIn(),
+      floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
+    );
+  }
+
+  Widget _buildBottomNavBar() {
+    return BottomAppBar(
+      shape: const CircularNotchedRectangle(),
+      notchMargin: 10,
+      color: AppColors.color1,
+      child: Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 16),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
-            const Icon(Icons.home, size: 80, color: Colors.blue),
-            const SizedBox(height: 20),
-            const Text(
-              'Pantalla Principal',
-              style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
-            ),
-            const SizedBox(height: 40),
-            ElevatedButton.icon(
-              icon: const Icon(Icons.qr_code_scanner, size: 28),
-              label: const Text(
-                'Iniciar Escaneo',
-                style: TextStyle(fontSize: 20),
-              ),
-              style: ElevatedButton.styleFrom(
-                padding: const EdgeInsets.symmetric(
-                  horizontal: 30,
-                  vertical: 15,
-                ),
-              ),
-              onPressed: () {
-                Navigator.pushNamed(context, '/scanner');
-              },
-            ),
+            _buildNavItem(Icons.home, 'Inicio', 0),
+            _buildNavItem(Icons.history, 'Historial', 1),
+            const SizedBox(width: 40),
+            _buildNavItem(Icons.person, 'Perfil', 3),
+            _buildNavItem(Icons.settings, 'Ajustes', 4),
           ],
         ),
       ),
+    );
+  }
+
+  Widget _buildNavItem(IconData icon, String label, int index) {
+    final isActive = _currentIndex == index;
+    return GestureDetector(
+      onTap: () => setState(() => _currentIndex = index),
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          Icon(icon, color: isActive ? AppColors.color3 : AppColors.color9),
+          Text(
+            label,
+            style: TextStyle(
+              color: isActive ? AppColors.color3 : AppColors.color9,
+              fontSize: 12,
+            ),
+          ),
+        ],
+      ).animate().fadeIn(delay: (index * 100).ms),
     );
   }
 
@@ -78,6 +116,11 @@ class _HomeScreenState extends State<HomeScreen> {
       child: Column(
         children: [
           UserAccountsDrawerHeader(
+            decoration: const BoxDecoration(
+              gradient: LinearGradient(
+                colors: [AppColors.color2, AppColors.color3],
+              ),
+            ),
             accountName: Text(
               _userData?['nombre'] ?? 'Usuario no identificado',
               style: const TextStyle(fontSize: 18),
@@ -87,30 +130,15 @@ class _HomeScreenState extends State<HomeScreen> {
               style: const TextStyle(fontSize: 14),
             ),
             currentAccountPicture: CircleAvatar(
-              backgroundColor: Colors.blue,
+              backgroundColor: AppColors.color4,
               child: Text(
-                _userData?['nombre']?.substring(0, 1) ?? '?',
+                _userData?['nombre']?.substring(0, 1).toUpperCase() ?? '?',
                 style: const TextStyle(fontSize: 30, color: Colors.white),
               ),
             ),
-            decoration: BoxDecoration(
-              color: Theme.of(context).primaryColor,
-            ),
           ),
-          ListTile(
-            leading: const Icon(Icons.person),
-            title: const Text('Perfil'),
-            onTap: () {
-              // Navegar a pantalla de perfil si es necesario
-            },
-          ),
-          ListTile(
-            leading: const Icon(Icons.history),
-            title: const Text('Historial de Escaneos'),
-            onTap: () {
-              // Navegar a pantalla de historial
-            },
-          ),
+          _buildDrawerItem(Icons.person, 'Perfil', () {}),
+          _buildDrawerItem(Icons.history, 'Historial de Escaneos', () {}),
           const Divider(),
           ListTile(
             leading: const Icon(Icons.info),
@@ -118,13 +146,17 @@ class _HomeScreenState extends State<HomeScreen> {
             subtitle: Text('Código: ${_userData?['codigo'] ?? 'N/A'}'),
           ),
           const Spacer(),
-          ListTile(
-            leading: const Icon(Icons.exit_to_app),
-            title: const Text('Cerrar Sesión'),
-            onTap: _logout,
-          ),
+          _buildDrawerItem(Icons.exit_to_app, 'Cerrar Sesión', _logout),
         ],
       ),
+    );
+  }
+
+  Widget _buildDrawerItem(IconData icon, String title, VoidCallback onTap) {
+    return ListTile(
+      leading: Icon(icon, color: AppColors.color3),
+      title: Text(title, style: TextStyle(color: AppColors.color3)),
+      onTap: onTap,
     );
   }
 }
