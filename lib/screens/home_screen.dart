@@ -51,7 +51,7 @@ class _HomeScreenState extends State<HomeScreen> {
 
   @override
   Widget build(BuildContext context) {
-    final size = MediaQuery.of(context).size;
+    // final size = MediaQuery.of(context).size;
 
     return Scaffold(
       backgroundColor: AppColors.color5,
@@ -72,8 +72,8 @@ class _HomeScreenState extends State<HomeScreen> {
                 decoration: BoxDecoration(
                   gradient: LinearGradient(
                     colors: [
-                      AppColors.color5.withOpacity(0.3),
-                      AppColors.color1.withOpacity(0.3),
+                      AppColors.color5.withAlpha(77),
+                      AppColors.color1.withAlpha(77),
                     ],
                     begin: Alignment.topCenter,
                     end: Alignment.bottomCenter,
@@ -85,24 +85,37 @@ class _HomeScreenState extends State<HomeScreen> {
           ],
         ),
       ),
+
       bottomNavigationBar: SafeArea(
-        child: Padding(
-          padding: const EdgeInsets.only(
-            bottom: 0,
-          ), 
-          child: Container(
-            height: 60,
-            color: AppColors.color1,
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceAround,
-              children: [
-                _buildNavItem(Icons.home, 'Inicio', 0),
-                _buildNavItem(Icons.history, 'Historial', 1),
-                _buildNavItem(Icons.qr_code_scanner, 'QR', 2),
-                _buildNavItem(Icons.person, 'Perfil', 3),
-                _buildNavItem(Icons.settings, 'Ajustes', 4),
-              ],
-            ),
+        child: Container(
+          height: 60,
+          color: AppColors.color1,
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceAround,
+            children: [
+              _buildNavItem(Icons.home, 'Inicio', 0),
+              _buildNavItem(Icons.history, 'Historial', 1),
+              SizedBox(height: 40),
+              _buildNavItem(Icons.person, 'Perfil', 3),
+              _buildNavItem(Icons.settings, 'Ajustes', 4),
+            ],
+          ),
+        ),
+      ),
+      floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
+      floatingActionButton: AnimatedScale(
+        scale: _currentIndex == 2 ? 1.1 : 1.0, 
+        duration: Duration(milliseconds: 300),
+        child: FloatingActionButton(
+          onPressed: () {
+            setState(() {
+              _currentIndex = 2;
+            });
+          },
+          backgroundColor: AppColors.color2,
+          child: Icon(
+            Icons.qr_code_scanner,
+            color: _currentIndex == 2 ? AppColors.color3 : AppColors.color5,
           ),
         ),
       ),
@@ -111,7 +124,7 @@ class _HomeScreenState extends State<HomeScreen> {
 
   Widget _buildNavItem(IconData icon, String label, int index) {
     final isActive = _currentIndex == index;
-    final color = isActive ? AppColors.color3 : Colors.white;
+    final color = isActive ? AppColors.color3 : AppColors.color5;
     final double activeSize = 30;
     final double inactiveSize = 24;
 
