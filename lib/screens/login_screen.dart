@@ -149,7 +149,7 @@ class _LoginScreenState extends State<LoginScreen> {
                                 'Bienvenido',
                                 style: Theme.of(context).textTheme.headlineSmall
                                     ?.copyWith(
-                                      color: AppColors.color4,
+                                      color: AppColors.color2,
                                       fontWeight: FontWeight.bold,
                                       letterSpacing: 1.2,
                                     ),
@@ -193,7 +193,7 @@ class _LoginScreenState extends State<LoginScreen> {
                                   value: _rememberMe,
                                   onChanged: (value) =>
                                       setState(() => _rememberMe = value!),
-                                  activeColor: const Color(0xFF11D6F8),
+                                  activeColor: AppColors.color4,
                                   shape: RoundedRectangleBorder(
                                     borderRadius: BorderRadius.circular(4),
                                   ),

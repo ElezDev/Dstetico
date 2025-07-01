@@ -26,17 +26,17 @@ class CustomTextField extends StatelessWidget {
     return TextFormField(
       controller: controller,
       obscureText: obscureText,
-      style: const TextStyle(color: Colors.white),
+      style: const TextStyle(color: AppColors.color2),
       validator: validator,
       decoration: InputDecoration(
         labelText: label,
-        labelStyle: const TextStyle(color: Colors.white70),
+        labelStyle: const TextStyle(color: AppColors.color2),
         filled: true,
-        fillColor: Colors.white.withAlpha(20),
+        fillColor: AppColors.color5.withAlpha(51),
         enabledBorder: OutlineInputBorder(
           borderRadius: BorderRadius.circular(14),
           borderSide: BorderSide(
-            color: Colors.white.withAlpha(102),
+            color: AppColors.color2.withAlpha(102),
             width: 1.5,
           ),
         ),
@@ -47,7 +47,7 @@ class CustomTextField extends StatelessWidget {
 
         focusedBorder: OutlineInputBorder(
           borderRadius: BorderRadius.circular(14),
-          borderSide: BorderSide(color: AppColors.color4, width: 2),
+          borderSide: BorderSide(color: AppColors.color2, width: 2),
         ),
         errorBorder: OutlineInputBorder(
           borderRadius: BorderRadius.circular(14),
