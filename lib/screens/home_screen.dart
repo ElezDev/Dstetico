@@ -85,19 +85,25 @@ class _HomeScreenState extends State<HomeScreen> {
           ],
         ),
       ),
-      bottomNavigationBar: Container(
-        margin: const EdgeInsets.only(bottom: 16),
-        height: 60,
-        color: AppColors.color1,
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceAround,
-          children: [
-            _buildNavItem(Icons.home, 'Inicio', 0),
-            _buildNavItem(Icons.history, 'Historial', 1),
-            _buildNavItem(Icons.qr_code_scanner, 'QR', 2),
-            _buildNavItem(Icons.person, 'Perfil', 3),
-            _buildNavItem(Icons.settings, 'Ajustes', 4),
-          ],
+      bottomNavigationBar: SafeArea(
+        child: Padding(
+          padding: const EdgeInsets.only(
+            bottom: 0,
+          ), 
+          child: Container(
+            height: 60,
+            color: AppColors.color1,
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceAround,
+              children: [
+                _buildNavItem(Icons.home, 'Inicio', 0),
+                _buildNavItem(Icons.history, 'Historial', 1),
+                _buildNavItem(Icons.qr_code_scanner, 'QR', 2),
+                _buildNavItem(Icons.person, 'Perfil', 3),
+                _buildNavItem(Icons.settings, 'Ajustes', 4),
+              ],
+            ),
+          ),
         ),
       ),
     );
