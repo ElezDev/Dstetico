@@ -95,7 +95,7 @@ class _HomeScreenState extends State<HomeScreen> {
             children: [
               _buildNavItem(Icons.home, 'Inicio', 0),
               _buildNavItem(Icons.history, 'Historial', 1),
-              SizedBox(height: 40),
+              SizedBox(height: 50),
               _buildNavItem(Icons.person, 'Perfil', 3),
               _buildNavItem(Icons.settings, 'Ajustes', 4),
             ],
