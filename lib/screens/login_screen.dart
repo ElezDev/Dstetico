@@ -135,10 +135,15 @@ class _LoginScreenState extends State<LoginScreen> {
                       child: Column(
                         mainAxisSize: MainAxisSize.min,
                         children: [
-                          const FlutterLogo(size: 80)
-                              .animate()
-                              .fadeIn(duration: 800.ms)
-                              .scale(begin: const Offset(0.7, 0.7)),
+                        Image.asset(
+                        'assets/icons/icon.png',
+                        width: 80,
+                        height: 80,
+                      )
+                      .animate()
+                      .fadeIn(duration: 800.ms)
+                      .scale(begin: const Offset(0.7, 0.7)),
+  
                           const SizedBox(height: 20),
                           Text(
                                 'Bienvenido',
