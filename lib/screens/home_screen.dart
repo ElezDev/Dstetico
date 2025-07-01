@@ -7,8 +7,6 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 import '../services/api_service.dart';
 
-// IMPORTACIONES IGUALES
-
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
   @override
@@ -74,8 +72,8 @@ class _HomeScreenState extends State<HomeScreen> {
                 decoration: BoxDecoration(
                   gradient: LinearGradient(
                     colors: [
-                      AppColors.color5.withOpacity(0.9),
-                      AppColors.color1.withOpacity(0.7),
+                      AppColors.color5.withOpacity(0.3),
+                      AppColors.color1.withOpacity(0.3),
                     ],
                     begin: Alignment.topCenter,
                     end: Alignment.bottomCenter,
@@ -88,6 +86,7 @@ class _HomeScreenState extends State<HomeScreen> {
         ),
       ),
       bottomNavigationBar: Container(
+        margin: const EdgeInsets.only(bottom: 16),
         height: 60,
         color: AppColors.color1,
         child: Row(
@@ -104,52 +103,51 @@ class _HomeScreenState extends State<HomeScreen> {
     );
   }
 
-
   Widget _buildNavItem(IconData icon, String label, int index) {
-  final isActive = _currentIndex == index;
-  final color = isActive ? AppColors.color3 : Colors.white;
-  final double activeSize = 30;
-  final double inactiveSize = 24;
+    final isActive = _currentIndex == index;
+    final color = isActive ? AppColors.color3 : Colors.white;
+    final double activeSize = 30;
+    final double inactiveSize = 24;
 
-  return GestureDetector(
-    onTap: () => setState(() => _currentIndex = index),
-    child: AnimatedContainer(
-      duration: 300.ms,
-      curve: Curves.easeOutBack,
-      padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
-      decoration: isActive
-          ? BoxDecoration(
-              color: AppColors.color10.withAlpha(64),
-              borderRadius: BorderRadius.circular(16),
-            )
-          : null,
-      child: Column(
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          AnimatedContainer(
-            duration: 300.ms,
-            curve: Curves.easeOutBack,
-            margin: EdgeInsets.only(bottom: isActive ? 4 : 0),
-            child: Icon(
-              icon,
-              color: color,
-              size: isActive ? activeSize : inactiveSize,
+    return GestureDetector(
+      onTap: () => setState(() => _currentIndex = index),
+      child: AnimatedContainer(
+        duration: 300.ms,
+        curve: Curves.easeOutBack,
+        padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+        decoration: isActive
+            ? BoxDecoration(
+                color: AppColors.color10.withAlpha(64),
+                borderRadius: BorderRadius.circular(16),
+              )
+            : null,
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            AnimatedContainer(
+              duration: 300.ms,
+              curve: Curves.easeOutBack,
+              margin: EdgeInsets.only(bottom: isActive ? 4 : 0),
+              child: Icon(
+                icon,
+                color: color,
+                size: isActive ? activeSize : inactiveSize,
+              ),
             ),
-          ),
-          AnimatedDefaultTextStyle(
-            duration: 300.ms,
-            style: TextStyle(
-              color: color,
-              fontSize: isActive ? 13 : 11,
-              fontWeight: isActive ? FontWeight.bold : FontWeight.normal,
+            AnimatedDefaultTextStyle(
+              duration: 300.ms,
+              style: TextStyle(
+                color: color,
+                fontSize: isActive ? 13 : 11,
+                fontWeight: isActive ? FontWeight.bold : FontWeight.normal,
+              ),
+              child: Text(label),
             ),
-            child: Text(label),
-          ),
-        ],
+          ],
+        ),
       ),
-    ),
-  );
-}
+    );
+  }
 
   Widget _buildDrawer() {
     return Drawer(
