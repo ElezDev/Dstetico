@@ -18,11 +18,11 @@ class _HomeScreenState extends State<HomeScreen> {
   int _currentIndex = 0;
 
   final List<Widget> _screens = [
-    const Center(child: Text('Scanner')),
-    const Center(child: Text('Historial')),
+    const Center(child: Text('')),
+    const Center(child: Text('')),
     ScannerScreen(),
-    const Center(child: Text('Perfil')),
-    const Center(child: Text('Ajustes')),
+    const Center(child: Text('')),
+    const Center(child: Text('')),
   ];
 
   @override
@@ -57,7 +57,7 @@ class _HomeScreenState extends State<HomeScreen> {
       backgroundColor: AppColors.color5,
       appBar: AppBar(
         backgroundColor: AppColors.color2,
-        title: const Text('D-Stetico', style: TextStyle(color: Colors.white)),
+        title: const Text('d-estético', style: TextStyle(color: Colors.white)),
         iconTheme: const IconThemeData(color: Colors.white),
       ),
       drawer: _buildDrawer(),
