@@ -129,4 +129,33 @@ class ApiService {
       throw Exception('Error al validar el código');
     }
   }
+
+  static Future<String?> getEventImage(String rawEncoded) async {
+    final sessionId = await getSessionId();
+
+    if (sessionId == null) throw Exception('No hay sesión activa');
+
+    final code = rawEncoded.trim().replaceFirst(';', '');
+
+    final response = await http.post(
+      Uri.parse('${_baseUrl}api_eventos.php'),
+      headers: {
+        'Authorization': _authToken,
+        'Content-Type': 'application/json',
+        'Cookie': 'PHPSESSID=$sessionId',
+      },
+      body: json.encode({'codigo': code}),
+    );
+
+    if (response.statusCode == 200) {
+      final data = json.decode(response.body);
+      if (data is String && data.isNotEmpty) {
+        return 'https://d-estetico.co/$data';
+      } else {
+        throw Exception('Respuesta inválida del servidor');
+      }
+    } else {
+      throw Exception('Error al obtener imagen del evento');
+    }
+  }
 }

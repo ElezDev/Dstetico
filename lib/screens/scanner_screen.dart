@@ -32,10 +32,128 @@ class _ScannerScreenState extends State<ScannerScreen> {
       _isScanning = false;
     });
 
+    final tipo = scannedCode.length > 50 ? 2 : 1;
+    final response = await ApiService.validateCode(scannedCode, tipo);
+    final bool esValido = response['codigo'] != 0;
+
     try {
-      final tipo = scannedCode.length > 50 ? 2 : 1;
-      final response = await ApiService.validateCode(scannedCode, tipo);
-      final bool esValido = response['codigo'] != 0;
+      final lines = scannedCode.split(RegExp(r'[\r\n]+'));
+      final hasEncodedLine = lines.any((line) => line.trim().startsWith(';'));
+
+      if (hasEncodedLine) {
+        final encodedLine = lines
+            .firstWhere((line) => line.trim().startsWith(';'))
+            .trim();
+        final imageUrl = await ApiService.getEventImage(encodedLine);
+
+        if (mounted) {
+          if (imageUrl != null) {
+            showDialog(
+              context: context,
+              builder: (context) {
+                final screenSize = MediaQuery.of(context).size;
+                return Dialog(
+                  insetPadding: const EdgeInsets.all(12),
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(20),
+                  ),
+                  child: Container(
+                    width: screenSize.width * 0.95,
+                    height: screenSize.height * 0.85,
+                    padding: const EdgeInsets.all(16),
+                    child: Column(
+                      children: [
+                        const Icon(
+                          Icons.event_available,
+                          size: 48,
+                          color: Colors.green,
+                        ),
+                        const SizedBox(height: 8),
+                        const Text(
+                          'Evento Encontrado',
+                          style: TextStyle(
+                            fontWeight: FontWeight.bold,
+                            fontSize: 22,
+                          ),
+                          textAlign: TextAlign.center,
+                        ),
+                        const SizedBox(height: 16),
+                        Expanded(
+                          child: ClipRRect(
+                            borderRadius: BorderRadius.circular(16),
+                            child: Image.network(
+                              imageUrl,
+                              fit: BoxFit.contain,
+                              width: double.infinity,
+                              loadingBuilder:
+                                  (context, child, loadingProgress) {
+                                    if (loadingProgress == null) return child;
+                                    return const Center(
+                                      child: CircularProgressIndicator(),
+                                    );
+                                  },
+                              errorBuilder: (context, error, stackTrace) =>
+                                  const Center(
+                                    child: Text(
+                                      'No se pudo cargar la imagen',
+                                      textAlign: TextAlign.center,
+                                      style: TextStyle(color: Colors.redAccent),
+                                    ),
+                                  ),
+                            ),
+                          ),
+                        ),
+                        const SizedBox(height: 16),
+                        const Text(
+                          '¿Deseas continuar con el escaneo?',
+                          textAlign: TextAlign.center,
+                          style: TextStyle(fontSize: 16),
+                        ),
+                        const SizedBox(height: 16),
+                        ElevatedButton.icon(
+                          style: ElevatedButton.styleFrom(
+                            foregroundColor: Colors.white,
+                            backgroundColor: Colors.green,
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(12),
+                            ),
+                            padding: const EdgeInsets.symmetric(
+                              horizontal: 24,
+                              vertical: 12,
+                            ),
+                          ),
+                          onPressed: () async {
+                            Navigator.pop(context);
+                            await Future.delayed(
+                              const Duration(milliseconds: 300),
+                            );
+                            if (mounted) {
+                              setState(() => _isScanning = true);
+                            }
+                          },
+                          icon: const Icon(Icons.qr_code_scanner),
+                          label: const Text(
+                            'CONTINUAR ESCANEANDO',
+                            style: TextStyle(fontWeight: FontWeight.bold),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                );
+              },
+            );
+          } else {
+            ScaffoldMessenger.of(context).showSnackBar(
+              const SnackBar(
+                content: Text('No se encontró imagen del evento'),
+                backgroundColor: Colors.orange,
+              ),
+            );
+          }
+        }
+        return;
+      }
 
       if (mounted) {
         showDialog(
@@ -62,7 +180,7 @@ class _ScannerScreenState extends State<ScannerScreen> {
                 ? Container(
                     padding: const EdgeInsets.all(12),
                     decoration: BoxDecoration(
-                      color: Colors.green.withOpacity(0.1),
+                      color: Colors.green.withValues(alpha: 0.1),
                       borderRadius: BorderRadius.circular(12),
                     ),
                     child: Column(
@@ -98,7 +216,7 @@ class _ScannerScreenState extends State<ScannerScreen> {
                       Container(
                         padding: const EdgeInsets.all(12),
                         decoration: BoxDecoration(
-                          color: Colors.red.withOpacity(0.1),
+                          color: Colors.red.withValues(alpha: 0.1),
                           borderRadius: BorderRadius.circular(12),
                         ),
                         child: Column(
@@ -218,12 +336,12 @@ class _ScannerScreenState extends State<ScannerScreen> {
                 child: Container(
                   padding: const EdgeInsets.all(8),
                   decoration: BoxDecoration(
-                    color: Colors.black.withOpacity(0.5),
+                    color: Colors.black.withValues(alpha: 0.5),
                     shape: BoxShape.circle,
                     boxShadow: [
                       BoxShadow(
                         color: _isTorchOn.value
-                            ? Colors.yellow.withOpacity(0.4)
+                            ? Colors.yellow.withValues(alpha: 0.4)
                             : Colors.transparent,
                         blurRadius: 15,
                         spreadRadius: 2,
@@ -341,7 +459,7 @@ class _ScannerScreenState extends State<ScannerScreen> {
 
           if (_isLoading)
             Container(
-              color: Colors.black.withOpacity(0.7),
+              color: Colors.black.withValues(alpha: 0.7),
               child: Center(
                 child: Column(
                   mainAxisSize: MainAxisSize.min,
