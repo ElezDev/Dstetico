@@ -116,7 +116,7 @@ class _LoginScreenState extends State<LoginScreen> {
                     width: isSmall ? double.infinity : 420,
                     padding: const EdgeInsets.all(24),
                     decoration: BoxDecoration(
-                      color: AppColors.color5.withAlpha(77),
+                      gradient: AppColors.esteticaGradientGlass,
                       borderRadius: BorderRadius.circular(32),
                       border: Border.all(
                         color: AppColors.color1.withAlpha(128),
@@ -135,24 +135,33 @@ class _LoginScreenState extends State<LoginScreen> {
                       child: Column(
                         mainAxisSize: MainAxisSize.min,
                         children: [
-                        Image.asset(
-                        'assets/icons/icon.png',
-                        width: 80,
-                        height: 80,
-                      )
-                      .animate()
-                      .fadeIn(duration: 800.ms)
-                      .scale(begin: const Offset(0.7, 0.7)),
-  
+                          Image.asset(
+                                'assets/icons/icon.png',
+                                width: 80,
+                                height: 80,
+                              )
+                              .animate()
+                              .fadeIn(duration: 800.ms)
+                              .scale(begin: const Offset(0.7, 0.7)),
+
                           const SizedBox(height: 20),
                           Text(
                                 'Bienvenido',
-                                style: Theme.of(context).textTheme.headlineSmall
-                                    ?.copyWith(
-                                      color: AppColors.color2,
-                                      fontWeight: FontWeight.bold,
-                                      letterSpacing: 1.2,
-                                    ),
+                                style: TextStyle(
+                                  fontSize: 32,
+                                  fontWeight: FontWeight.bold,
+                                  letterSpacing: 1.2,
+                                  foreground: Paint()
+                                    ..shader =
+                                        const LinearGradient(
+                                          colors: <Color>[
+                                            Color(0xFFb357a7),
+                                            Color(0xFF76aeee),
+                                          ],
+                                        ).createShader(
+                                          Rect.fromLTWH(0.0, 0.0, 200.0, 70.0),
+                                        ),
+                                ),
                               )
                               .animate()
                               .fadeIn(duration: 500.ms)
@@ -193,7 +202,7 @@ class _LoginScreenState extends State<LoginScreen> {
                                   value: _rememberMe,
                                   onChanged: (value) =>
                                       setState(() => _rememberMe = value!),
-                                  activeColor: AppColors.color4,
+                                  activeColor: AppColors.esteticaMorado,
                                   shape: RoundedRectangleBorder(
                                     borderRadius: BorderRadius.circular(4),
                                   ),
@@ -202,14 +211,24 @@ class _LoginScreenState extends State<LoginScreen> {
                                       VisualDensity.compact, // más limpio
                                 ),
                                 const SizedBox(width: 8),
-                                const Text(
-                                  'Recuérdame',
-                                  style: TextStyle(
-                                    color: Colors.white,
-                                    fontSize: 16,
-                                    letterSpacing: 0.3,
-                                  ),
+                                 Text(
+                                'Recuerdame',
+                                style: TextStyle(
+                                  fontSize: 16,
+                                  fontWeight: FontWeight.bold,
+                                  letterSpacing: 0.3,
+                                  foreground: Paint()
+                                    ..shader =
+                                        const LinearGradient(
+                                          colors: <Color>[
+                                            Color(0xFFb357a7),
+                                            Color(0xFF76aeee),
+                                          ],
+                                        ).createShader(
+                                          Rect.fromLTWH(0.0, 0.0, 200.0, 70.0),
+                                        ),
                                 ),
+                              )
                               ],
                             ),
                           ).animate().fadeIn(delay: 500.ms),
@@ -219,7 +238,7 @@ class _LoginScreenState extends State<LoginScreen> {
                             onPressed: _isLoading ? null : _login,
                             isLoading: _isLoading,
                             text: 'Iniciar Sesión',
-                            backgroundColor: AppColors.color2,
+                            gradient: AppColors.esteticaGradient,
                             textColor: Colors.white,
                           ).animate().fadeIn(delay: 600.ms),
                         ],

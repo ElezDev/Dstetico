@@ -51,15 +51,18 @@ class _HomeScreenState extends State<HomeScreen> {
 
   @override
   Widget build(BuildContext context) {
-    // final size = MediaQuery.of(context).size;
-
     return Scaffold(
       backgroundColor: AppColors.color5,
       appBar: AppBar(
-        backgroundColor: AppColors.color2,
+        elevation: 0,
+        backgroundColor: Colors.transparent,
+        flexibleSpace: Container(
+          decoration: const BoxDecoration(gradient: AppColors.esteticaGradient),
+        ),
         title: const Text('d-estético', style: TextStyle(color: Colors.white)),
         iconTheme: const IconThemeData(color: Colors.white),
       ),
+
       drawer: _buildDrawer(),
       body: SafeArea(
         child: Stack(
@@ -89,7 +92,7 @@ class _HomeScreenState extends State<HomeScreen> {
       bottomNavigationBar: SafeArea(
         child: Container(
           height: 60,
-          color: AppColors.color1,
+          decoration: const BoxDecoration(gradient: AppColors.esteticaGradient),
           child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceAround,
             children: [
@@ -102,9 +105,10 @@ class _HomeScreenState extends State<HomeScreen> {
           ),
         ),
       ),
+
       floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
       floatingActionButton: AnimatedScale(
-        scale: _currentIndex == 2 ? 1.1 : 1.0, 
+        scale: _currentIndex == 2 ? 1.1 : 1.0,
         duration: Duration(milliseconds: 300),
         child: FloatingActionButton(
           onPressed: () {
@@ -112,10 +116,10 @@ class _HomeScreenState extends State<HomeScreen> {
               _currentIndex = 2;
             });
           },
-          backgroundColor: AppColors.color2,
+          backgroundColor: AppColors.esteticaAzul,
           child: Icon(
             Icons.qr_code_scanner,
-            color: _currentIndex == 2 ? AppColors.color3 : AppColors.color5,
+            color: _currentIndex == 2 ? AppColors.esteticaMorado : AppColors.color5,
           ),
         ),
       ),
@@ -124,7 +128,7 @@ class _HomeScreenState extends State<HomeScreen> {
 
   Widget _buildNavItem(IconData icon, String label, int index) {
     final isActive = _currentIndex == index;
-    final color = isActive ? AppColors.color3 : AppColors.color5;
+    final color = isActive ? AppColors.color2 : AppColors.color5;
     final double activeSize = 30;
     final double inactiveSize = 24;
 
@@ -174,23 +178,21 @@ class _HomeScreenState extends State<HomeScreen> {
         children: [
           UserAccountsDrawerHeader(
             decoration: const BoxDecoration(
-              gradient: LinearGradient(
-                colors: [AppColors.color2, AppColors.color3],
-              ),
+              gradient: AppColors.esteticaGradient,
             ),
             accountName: Text(
               _userData?['nombre'] ?? 'Usuario no identificado',
-              style: const TextStyle(fontSize: 18),
+              style: const TextStyle(fontSize: 18, color: AppColors.color2, fontWeight: FontWeight.bold),
             ),
             accountEmail: Text(
               _userData?['login'] ?? '',
-              style: const TextStyle(fontSize: 14),
+              style: const TextStyle(fontSize: 14, color: AppColors.color2, fontStyle: FontStyle.italic),
             ),
             currentAccountPicture: CircleAvatar(
-              backgroundColor: AppColors.color4,
+              backgroundColor: AppColors.color2,
               child: Text(
                 _userData?['nombre']?.substring(0, 1).toUpperCase() ?? '?',
-                style: const TextStyle(fontSize: 30, color: Colors.white),
+                style: const TextStyle(fontSize: 30, color: AppColors.esteticaAzul),
               ),
             ),
           ),
@@ -220,7 +222,7 @@ class _HomeScreenState extends State<HomeScreen> {
 
   Widget _buildDrawerItem(IconData icon, String title, VoidCallback onTap) {
     return ListTile(
-      leading: Icon(icon, color: AppColors.color3),
+      leading: Icon(icon, color: AppColors.esteticaMorado),
       title: Text(title, style: const TextStyle(fontSize: 15)),
       onTap: onTap,
     );

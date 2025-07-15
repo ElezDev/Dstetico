@@ -66,7 +66,7 @@ class _ScannerScreenState extends State<ScannerScreen> {
                         const Icon(
                           Icons.event_available,
                           size: 48,
-                          color: Colors.green,
+                          color: AppColors.esteticaMorado,
                         ),
                         const SizedBox(height: 8),
                         const Text(
@@ -110,31 +110,40 @@ class _ScannerScreenState extends State<ScannerScreen> {
                           style: TextStyle(fontSize: 16),
                         ),
                         const SizedBox(height: 16),
-                        ElevatedButton.icon(
-                          style: ElevatedButton.styleFrom(
-                            foregroundColor: Colors.white,
-                            backgroundColor: Colors.green,
-                            shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(12),
-                            ),
-                            padding: const EdgeInsets.symmetric(
-                              horizontal: 24,
-                              vertical: 12,
-                            ),
+                        // 1. Envuelve el botón en un Container y dale una decoración con gradiente.
+                        Container(
+                          decoration: BoxDecoration(
+                            gradient: AppColors.esteticaGradient,
+                            borderRadius: BorderRadius.circular(12),
                           ),
-                          onPressed: () async {
-                            Navigator.pop(context);
-                            await Future.delayed(
-                              const Duration(milliseconds: 300),
-                            );
-                            if (mounted) {
-                              setState(() => _isScanning = true);
-                            }
-                          },
-                          icon: const Icon(Icons.qr_code_scanner),
-                          label: const Text(
-                            'CONTINUAR ESCANEANDO',
-                            style: TextStyle(fontWeight: FontWeight.bold),
+                          child: ElevatedButton.icon(
+                            style: ElevatedButton.styleFrom(
+                              backgroundColor: Colors.transparent,
+                              shadowColor: Colors.transparent,
+
+                              foregroundColor: Colors.white,
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(12),
+                              ),
+                              padding: const EdgeInsets.symmetric(
+                                horizontal: 24,
+                                vertical: 12,
+                              ),
+                            ),
+                            onPressed: () async {
+                              Navigator.pop(context);
+                              await Future.delayed(
+                                const Duration(milliseconds: 300),
+                              );
+                              if (mounted) {
+                                setState(() => _isScanning = true);
+                              }
+                            },
+                            icon: const Icon(Icons.qr_code_scanner),
+                            label: const Text(
+                              'CONTINUAR ESCANEANDO',
+                              style: TextStyle(fontWeight: FontWeight.bold),
+                            ),
                           ),
                         ),
                       ],
@@ -147,7 +156,7 @@ class _ScannerScreenState extends State<ScannerScreen> {
             ScaffoldMessenger.of(context).showSnackBar(
               const SnackBar(
                 content: Text('No se encontró imagen del evento'),
-                backgroundColor: Colors.orange,
+                backgroundColor: AppColors.esteticaMorado,
               ),
             );
           }
@@ -165,7 +174,7 @@ class _ScannerScreenState extends State<ScannerScreen> {
             title: Text(
               esValido ? 'USUARIO VÁLIDO' : 'CÓDIGO INVÁLIDO',
               style: TextStyle(
-                color: esValido ? Colors.green : Colors.red,
+                color: esValido ? AppColors.esteticaMorado : Colors.red,
                 fontWeight: FontWeight.bold,
                 fontSize: 20,
               ),
@@ -173,7 +182,7 @@ class _ScannerScreenState extends State<ScannerScreen> {
             ),
             icon: Icon(
               esValido ? Icons.verified_user : Icons.error_outline,
-              color: esValido ? Colors.green : Colors.red,
+              color: esValido ? AppColors.esteticaMorado : Colors.red,
               size: 52,
             ),
             content: esValido
@@ -280,7 +289,7 @@ class _ScannerScreenState extends State<ScannerScreen> {
       padding: const EdgeInsets.symmetric(vertical: 6),
       child: Row(
         children: [
-          Icon(icon, color: AppColors.color1, size: 20),
+          Icon(icon, color: AppColors.esteticaAzul, size: 20),
           const SizedBox(width: 8),
           Text(
             label,
@@ -384,9 +393,13 @@ class _ScannerScreenState extends State<ScannerScreen> {
                   width: MediaQuery.of(context).size.width * 0.7,
                   height: MediaQuery.of(context).size.width * 0.7,
                   decoration: BoxDecoration(
-                    border: Border.all(color: AppColors.color1, width: 4),
+                    border: Border.all(
+                      color: AppColors.esteticaMorado,
+                      width: 4,
+                    ),
                     borderRadius: BorderRadius.circular(20),
                   ),
+
                   child: Stack(
                     children: [
                       // Corner borders
@@ -438,7 +451,9 @@ class _ScannerScreenState extends State<ScannerScreen> {
                       _isScanning ? 'Escaneo activado' : 'Escaneo pausado',
                       style: const TextStyle(fontWeight: FontWeight.bold),
                     ),
-                    backgroundColor: _isScanning ? Colors.green : Colors.orange,
+                    backgroundColor: _isScanning
+                        ? AppColors.esteticaAzul
+                        : AppColors.esteticaMorado,
                     duration: const Duration(milliseconds: 800),
                     behavior: SnackBarBehavior.floating,
                     shape: RoundedRectangleBorder(
@@ -447,7 +462,9 @@ class _ScannerScreenState extends State<ScannerScreen> {
                   ),
                 );
               },
-              backgroundColor: _isScanning ? AppColors.color1 : Colors.orange,
+              backgroundColor: _isScanning
+                  ? AppColors.esteticaAzul
+                  : AppColors.esteticaMorado,
               elevation: 4,
               child: Icon(
                 _isScanning ? Icons.qr_code_scanner : Icons.pause,
@@ -466,7 +483,7 @@ class _ScannerScreenState extends State<ScannerScreen> {
                   children: [
                     CircularProgressIndicator(
                       valueColor: AlwaysStoppedAnimation<Color>(
-                        AppColors.color1,
+                        AppColors.esteticaAzul,
                       ),
                       strokeWidth: 6,
                     ),

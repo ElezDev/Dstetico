@@ -1,3 +1,4 @@
+import 'dart:ui'; // Para ImageFilter
 import 'package:Dstetico/theme/app_colors.dart';
 import 'package:flutter/material.dart';
 
@@ -23,49 +24,50 @@ class CustomTextField extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return TextFormField(
-      controller: controller,
-      obscureText: obscureText,
-      style: const TextStyle(color: AppColors.color2),
-      validator: validator,
-      decoration: InputDecoration(
-        labelText: label,
-        labelStyle: const TextStyle(color: AppColors.color2),
-        filled: true,
-        fillColor: AppColors.color5.withAlpha(51),
-        enabledBorder: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(14),
-          borderSide: BorderSide(
-            color: AppColors.color2.withAlpha(102),
-            width: 1.5,
+    return ClipRRect(
+      borderRadius: BorderRadius.circular(14),
+      child: BackdropFilter(
+        filter: ImageFilter.blur(sigmaX: 10, sigmaY: 10),
+        child: Container(
+          decoration: BoxDecoration(
+            gradient: LinearGradient(
+              colors: [
+                AppColors.esteticaMorado.withOpacity(0.2),
+                AppColors.esteticaAzul.withOpacity(0.2),
+              ],
+              begin: Alignment.topRight,
+              end: Alignment.bottomLeft,
+            ),
+            borderRadius: BorderRadius.circular(14),
+            border: Border.all(color: Colors.white.withOpacity(0.2)),
+          ),
+          child: TextFormField(
+            controller: controller,
+            obscureText: obscureText,
+            style: const TextStyle(color: AppColors.esteticaMorado),
+            validator: validator,
+            decoration: InputDecoration(
+              labelText: label,
+              labelStyle: const TextStyle(color: AppColors.esteticaMorado),
+              border: InputBorder.none,
+              contentPadding: const EdgeInsets.symmetric(
+                vertical: 18,
+                horizontal: 24,
+              ),
+              suffixIcon: showToggleVisibility
+                  ? IconButton(
+                      icon: Icon(
+                        isPasswordVisible
+                            ? Icons.visibility
+                            : Icons.visibility_off,
+                        color: Colors.white70,
+                      ),
+                      onPressed: onToggleVisibility,
+                    )
+                  : null,
+            ),
           ),
         ),
-        contentPadding: const EdgeInsets.symmetric(
-          vertical: 18,
-          horizontal: 24,
-        ),
-
-        focusedBorder: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(14),
-          borderSide: BorderSide(color: AppColors.color2, width: 2),
-        ),
-        errorBorder: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(14),
-          borderSide: const BorderSide(color: Colors.redAccent),
-        ),
-        focusedErrorBorder: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(14),
-          borderSide: const BorderSide(color: Colors.redAccent),
-        ),
-        suffixIcon: showToggleVisibility
-            ? IconButton(
-                icon: Icon(
-                  isPasswordVisible ? Icons.visibility : Icons.visibility_off,
-                  color: Colors.white70,
-                ),
-                onPressed: onToggleVisibility,
-              )
-            : null,
       ),
     );
   }

@@ -22,4 +22,13 @@ class AppColors {
     begin: Alignment.topRight,
     end: Alignment.bottomLeft,
   );
+
+  static final LinearGradient esteticaGradientGlass = LinearGradient(
+  colors: [
+    esteticaMorado.withOpacity(0.2),
+    esteticaAzul.withOpacity(0.2),
+  ],
+  begin: Alignment.topRight,
+  end: Alignment.bottomLeft,
+);
 }
